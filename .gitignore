@@ -137,3 +137,9 @@ dmypy.json
 
 # ini config files
 *.ini
+
+# data
+input
+
+# tensorboard
+tensorboard
