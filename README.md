@@ -1,2 +1,1 @@
-# updated_gitignore
-Python 기반 .gitignore에 자주 추가하는 파일, 확장자를 추가
+# Lending club dataset(2007~2018)에 대한 신용평가시스템
