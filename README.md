@@ -111,4 +111,12 @@
 
 
 # 4. Proposed idea
-1. [`proposed1`](proposed1.ipynb)
+## 1) [`proposed1`](proposed1.ipynb)
+1. train, validation, test set 분리
+2. `pycaret`을 이용하여 modeling 수행
+   1. vanilla setting: 0.67(F1 score)
+      - `0` class의 recall이 7% 밖에 안 됨 (타 class는 70% 이상)\
+      **Data imbalance 문제 발생**
+      - Feature importances: `initial_list_status` >> `mort_acc_nan_x_mort_acc`, `application_type` >> `grade` > `term` > `sub_grade` > `int_rate` > `x1_Verified`, `x1_Not Verified` > `earliest_cr_line` \
+      **많은 feature가 큰 의미를 가지지 않아보인다**
+   2. `fix_imbalance=True`: 
