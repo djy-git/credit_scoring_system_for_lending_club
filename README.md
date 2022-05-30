@@ -83,6 +83,7 @@
          - `verification_status`는 오히려 더 상태가 좋음 (`Not Verified`의 30% 정도 더 낮음)
          - `revol_bal`의 평균이 더 높다는 것은, 평균적으로 빌릴 수 있는 돈이 더 많다? 아무튼, 연속적이지 않고 다른 형태의 분포를 가지고 있다.
        - `revol_util=0`인 경우, `revol_bal`의 분포가 봉우리가 2개인 mixture gaussian dist.로 보인다.
+       - `revol_util` nan값은 0으로 imputing
        - 큰 특징의 차이가 있으므로, 결측치, 0값에 대한 flag feature를 2개 만들 필요가 있음
     8. `revol_bal`: 0
        - 0값이 엄청 많음.(10249)
