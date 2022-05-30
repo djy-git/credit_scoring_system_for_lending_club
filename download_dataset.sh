@@ -7,15 +7,14 @@
 
 
 # Dataset will be downloaded in 'input' directory
-mkdir input
 cd input
 
 # 1. Accepted, rejected dataset
 kaggle datasets download wordsforthewise/lending-club
-unzip *
-rm *
+unzip *.zip
 mv */* .
 rmdir *
+rm *.zip *.csv.gz
 
-# 2. Feature description
-wget https://resources.lendingclub.com/LCDataDictionary.xlsx
+# 2. Feature description (file exists in input directory)
+#wget https://resources.lendingclub.com/LCDataDictionary.xlsx
