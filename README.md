@@ -113,10 +113,39 @@
 # 4. Proposed idea
 ## 1) [`proposed1`](proposed1.ipynb)
 1. train, validation, test set 분리
+   - 시간 상 전체 데이터의 1%만 사용 (1.3만 / .4만 / .4만)
 2. `pycaret`을 이용하여 modeling 수행
-   1. vanilla setting: 0.67(F1 score)
-      - `0` class의 recall이 7% 밖에 안 됨 (타 class는 70% 이상)\
-      **Data imbalance 문제 발생**
-      - Feature importances: `initial_list_status` >> `mort_acc_nan_x_mort_acc`, `application_type` >> `grade` > `term` > `sub_grade` > `int_rate` > `x1_Verified`, `x1_Not Verified` > `earliest_cr_line` \
+   1. vanilla setting: 0.6532 (F1 score)
+      - Recalls: [9%, 73%, 78%] \
+      -> `0` class의 recall이 11% 밖에 안 됨 (타 class는 70% 이상) \
+      -> **Data imbalance 문제 발생**
+      - Feature importances(데이터의 1% 사용): `int_rate` >> `earliest_cr_line` > `annual_inc`, `revol_util`, `dti`, `sub_grade`, `revol_bal` > `installment`, `total_acc`, `loan_amnt` \
+        데이터 개수에 따라서 feature importance도 달라지기 때문에 다양한 실험이 필요해보인다.
+      - Feature importances(데이터의 10% 사용): `initial_list_status` >> `mort_acc_nan_x_mort_acc`, `application_type` >> `grade` > `term` > `sub_grade` > `int_rate` > `x1_Verified`, `x1_Not Verified` > `earliest_cr_line` \
       **많은 feature가 큰 의미를 가지지 않아보인다**
-   2. `fix_imbalance=True`: 
+   2. `fix_imbalance=True`: 0.6375 (F1 score)
+      - Over sampling을 하다보니 학습 시 시간이 좀 걸린다.
+      - Recalls: [11%, 71%, 75%] \
+      1번에 비해 F1 score가 0.02 낮지만, recall은 좀 더 낫다. \
+      그러나 **근본적인 해결책은 되지 않는다.**
+   3. `remove_outliers=True`: 0.6394 (F1 score)
+      - Recalls: [8%, 70%, 77%] \
+      1번보다 더 안 좋아졌다. 아마도 outlier에 중요한 정보가 있는 듯?
+   4. `pca=True`: 0.5828 (F1 score)
+      - Recalls: [5.5%, 63%, 72%] \
+      1번보다 더 안 좋아졌다.
+      - Decision boundary를 보니 model의 성능보다 더 구분력이 높은 feature가 필요한 것 같다.  
+      ![](assets/pca_decision_boundary.png)
+      - `pca_components=0.99` 인데도 92개 feature가 뽑힌 걸 보면 아마 엄청 많은 feature가 의미가 약한 것 같다.(embedding pad, etc)
+   5. `feature_selection=True, feature_selection_threshold=0.5`: 0.6502 (F1 score)
+      - Recalls: [8%, 72%, 78%] \
+      1번에 비해 F1 score와 Recall이 좋진 않다.
+      - Feature의 개수가 173개 밖에 안 되는 걸 고려하면 PCA보다 feature selection이 꽤 괜찮은 성능을 보이는 것 같다. \
+      Categorical features에 대해서는 PCA보다 feature selection이 더 효과가 좋은걸까?
+   6. Vanilla model, 10% data: 0.6715 (F1 score)
+      - 전체 데이터의 10%를 사용
+      - 큰 차이 없음
+   7. `feature_selection=True, feature_selection_threshold=0.5`, 10% data: 0.6718 (F1 score)
+      - 역시나, 175개 feature만 사용하는데도 큰 차이 없음
+   8. `feature_selection=True, feature_selection_threshold=0.5, fix_imbalance=True`, 10% data: 0.6693 (F1 score)
+      - 조금 F1 score가 떨어지긴하나 recall 역시 조금 오름
